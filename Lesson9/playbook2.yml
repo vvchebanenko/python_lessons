@@ -1,0 +1,15 @@
+---
+- name: Подсчет колличества интерфейсов
+  hosts: all
+  tasks:
+    - name: Get packet count on all interfaces
+      command: ifconfig
+      register: ifconfig_output
+
+    - name: Подсчет вывода
+      set_fact:
+        packets: "{{ ifconfig_output.stdout | regex_findall('RX packets:([0-9]+)') }}"
+
+    - name: Calculate total received packets
+      debug:
+        msg: "Total received packets: {{ packets | map('int') | sum }}"

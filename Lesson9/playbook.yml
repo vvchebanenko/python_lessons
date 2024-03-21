@@ -1,0 +1,25 @@
+- name: Получение количества пакетов на всех интерфейсах
+  hosts: all
+  tasks:
+    - name: Получение данных о количестве пакетов на всех интерфейсах
+      shell: "netstat -i | awk 'NR>2 {print $1}'"
+      register: interfaces
+      changed_when: false
+
+    - name: Вывод количества пакетов на интерфейсах
+      debug:
+        var: interfaces.stdout_lines
+
+- name: Получение статистики по каждому интерфейсу
+  hosts: all
+  tasks:
+    - name: Получение статистики по каждому интерфейсу
+      shell: "ifconfig {{ item }} | grep 'RX packets'"
+      register: interface_stats
+      with_items: "{{ interfaces.stdout_lines }}"
+      changed_when: false
+
+    - name: Вывод статистики по каждому интерфейсу
+      debug:
+        var: item.stdout_lines
+      with_items: "{{ interface_stats.results }}"
