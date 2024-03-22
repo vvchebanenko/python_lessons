@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask template example</title>
+</head>
+<body>
+    <p>Список IP:</p>
+    <p>
+        <ul>
+            {% for s in ip_list %}
+                <li>{{s}}</li>
+            {% endfor %}
+        </ul>
+    </p>
+
+</body>
+</html>
